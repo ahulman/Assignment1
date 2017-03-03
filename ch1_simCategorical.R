@@ -18,7 +18,7 @@ dataCategorical$ethnic <-rbinom(N, 1, 0.05)
 #Generate smoking status
 smoke <- c(0, 1, 2)
 
-dataCategorical$smoke <- ifelse(dataCategorical$sex == 0, sample(smoke, 1, replace = TRUE, prob = c(0.5, 0.3, 0.2)), sample(smoke, 1, replace = TRUE, prob = c(0.6, 0.3, 0.1)))
+dataCategorical$smoke <- ifelse(dataCategorical$sex == 0, sample(smoke, 0.6*N, replace = TRUE, prob = c(0.5, 0.3, 0.2)), sample(smoke, 0.4*N, replace = TRUE, prob = c(0.6, 0.3, 0.1)))
 
 dataCategorical$smoke <- factor (dataCategorical$smoke,
                    levels = c(0, 1, 2),
