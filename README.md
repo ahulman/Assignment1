@@ -1,4 +1,4 @@
-# Challenge 2
+# Challenge 2 yes yes no
 In this challenge you will analyse the dataset generated in the previous step (with some modifications), and also interpret the results. Each one of you works in separate scripts (find them in the project folder).
 
 Based on what you have done last week (a cleaned-up version), write a function called *simCohort* that takes two parameters: *N* (number of individuals in the cohort) and *seed* (seed for the random number generation). Stick to the proportion of men/women, smoker/non-smoker etc. from the previous exercise.
