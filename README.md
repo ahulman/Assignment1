@@ -1,3 +1,32 @@
+# Challenge 2
+In this challenge you will analyse the dataset generated in the previous step (with some modifications), and also interpret the results. Each one of you works in separate scripts (find them in the project folder).
+
+Based on what you have done last week (a cleaned-up version), write a function called *simCohort* that takes two parameters: *N* (number of individuals in the cohort) and *seed* (seed for the random number generation). Stick to the proportion of men/women, smoker/non-smoker etc. from the previous exercise.
+
+**TIP**: Check out the corresponding coursera videos on creating functions.
+
+Then simulate two cohorts and use them when solving the 4 tasks below.
+
+cohort1 <- simCohort(100, 123)
+
+cohort2 <- simCohort(10000, 987)
+
+1. Examine the association between age and sex (exposures) and bmi (continuous outcome). Use the *lm* function. 
+
+2. Examine whether sex modifies the effect of age on bmi. Include an interaction between age and sex in the model. 
+
+3. Do you see any differences between the results from the two cohorts? Why is that? Write a few lines on the interpretation of the results.
+
+4. Bonus exercise: make a scatterplot and display the regression line. You can use both ggplot2 or the base graphics system. Be creative!
+
+
+
+
+
+
+
+
+
 # Challenge 1
 Your task is to simulate a cohort data set (Step 1) including both continuous and categorical characteristics. Then characterise the cohort (Step 2) using descriptive statistics (usual Table 1).
 
