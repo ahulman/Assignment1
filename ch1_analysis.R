@@ -14,7 +14,7 @@ total$ethnic <- factor (total$ethnic,
                  levels = c(0, 1),
                  labels = c("non-white", "white"))
 
-total$sex.x <- factor (total$sex.x,
+total$sex <- factor (total$sex,
                         levels = c(0, 1),
                         labels = c("male", "female"))
 
@@ -37,13 +37,13 @@ prop.table(table(total$sex, total$smoke), margin = 1)
 tapply(total$age, total$sex, hist)
 
 
-tapply(total$age, total$sex.x, summary)
+tapply(total$age, total$sex, summary)
 
-tapply(total$bmi, total$sex.x, summary)
+tapply(total$bmi, total$sex, summary)
 
-prop.table(table(total$sex.x, total$ethnic), margin = 1)
+prop.table(table(total$sex, total$ethnic), margin = 1)
 
-prop.table(table(total$sex.x, total$smoke), margin = 1)
+prop.table(table(total$sex, total$smoke), margin = 1)
 
-tapply(total$age, total$sex.x, hist)
+tapply(total$age, total$sex, hist)
 
