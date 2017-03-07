@@ -3,7 +3,10 @@
 simCohort <- function(N,S){
     set.seed(S)
     ###Jakob
-       id <- c(1:N)
+
+       
+    id <- c(1:N)
+
     
     #creates a sex variable for first 600 and appends last 400
     sex <- rep.int(0,N*6/10)
@@ -14,9 +17,14 @@ simCohort <- function(N,S){
     
     dataContinuous$age <- runif(N, min = 40, max = 70)
     
+
     dataContinuous$bmi <- ifelse(dataContinuous$sex==0, 21 + 0.1*dataContinuous$age + rnorm(N, 0 , 2), 20 + 0.15*dataContinuous$age + rnorm(N, 0 , 2.5))
     
         ###OMAR
+
+    dataContinuous$bmi <- ifelse(dataContinuous$sex==0, 21 + 0.1*dataContinuous$age + rnorm(N, 0 , 2), 20 + 0.15*dataContinuous$age + rnorm(N, 0 , 2.5))
+    ###OMAR
+
     #Output data frame
     dataCategorical = data.frame(sex, id)
     
@@ -26,7 +34,10 @@ simCohort <- function(N,S){
     #Generate smoking status
     smoke <- c(0, 1, 2)
     
-    dataCategorical$smoke <- ifelse(dataCategorical$sex == 0, sample(smoke, 0.6*N, replace = TRUE, prob = c(0.5, 0.3, 0.2)), sample(smoke, 0.4*N, replace = TRUE, prob = c(0.6, 0.3, 0.1)))    
+    dataCategorical$smoke <- ifelse(dataCategorical$sex == 0, sample(smoke, N, replace = TRUE, prob = c(0.5, 0.3, 0.2)), sample(smoke, N, replace = TRUE, prob = c(0.6, 0.3, 0.1)))    
+
+    dataCategorical$smoke <- ifelse(dataCategorical$sex == 0, sample(smoke, N, replace = TRUE, prob = c(0.5, 0.3, 0.2)), sample(smoke, N, replace = TRUE, prob = c(0.6, 0.3, 0.1)))
+    
     dataCategorical$smoke <- factor (dataCategorical$smoke,
                                      levels = c(0, 1, 2),
                                      labels = c("never", "ex", "current"))
@@ -47,16 +58,24 @@ simCohort <- function(N,S){
 }
 #creates sample cohorts
 
+simCohort(20000,1)
+
+
 cohort1 <- simCohort(100, 123)
 
 cohort2 <- simCohort(10000, 987)
 
+
 #plots associations to examine
+
+#plots associations
+
 plot(cohort1$age,cohort1$bmi)
 plot(cohort1$sex,cohort1$bmi)
 
 plot(cohort2$age,cohort2$bmi)
 plot(cohort2$sex,cohort2$bmi)
+
 
 
 # cohort1 -----------------------------------------------------------------
@@ -117,3 +136,12 @@ bmiMultiRegression <- lm(bmi~age*sex, cohort2)
 bmiMultiRegression
 plot(cohort2$age, fitted(bmiMultiRegression))
 #notice that for females, the age effect is increased by 0,05 per year. Being female however reduces BMI with 0,9
+
+#creates linear models
+bmi.mod <- lm(formula = bmi ~ age, cohort1)
+bmi.mod
+
+bmi.mod <- lm(formula = bmi ~ sex, cohort1)
+bmi.mod
+plot(bmi.mod)
+
