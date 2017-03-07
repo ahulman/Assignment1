@@ -58,23 +58,23 @@ simCohort <- function(N,S){
 }
 #creates sample cohorts
 
-simCohort(20000,1)
-
-
-cohort1 <- simCohort(100, 123)
-
-cohort2 <- simCohort(10000, 987)
+    simCohort(20000,1)
+    
+    
+    cohort1 <- simCohort(100, 123)
+    
+    cohort2 <- simCohort(10000, 987)
 
 
 #plots associations to examine
 
 #plots associations
 
-plot(cohort1$age,cohort1$bmi)
-plot(cohort1$sex,cohort1$bmi)
-
-plot(cohort2$age,cohort2$bmi)
-plot(cohort2$sex,cohort2$bmi)
+    plot(cohort1$age,cohort1$bmi)
+    plot(cohort1$sex,cohort1$bmi)
+    
+    plot(cohort2$age,cohort2$bmi)
+    plot(cohort2$sex,cohort2$bmi)
 
 
 
@@ -82,45 +82,45 @@ plot(cohort2$sex,cohort2$bmi)
 
 
 #creates linear models with single explanatory variable
+    
+    bmi.mod <- lm(bmi ~ age, cohort1)
+    plot(cohort1$age,cohort1$bmi)
+    mean.bmi <- mean(cohort1$bmi)
+    abline(bmi.mod, col="red")
+    abline(h=mean.bmi, col="blue")
+    summary(bmi.mod)
 
-bmi.mod <- lm(bmi ~ age, cohort1)
-plot(cohort1$age,cohort1$bmi)
-mean.bmi <- mean(cohort1$bmi)
-abline(bmi.mod, col="red")
-abline(h=mean.bmi, col="blue")
-summary(bmi.mod)
-
-bmi.mod <- lm(bmi ~ sex, cohort1)
-
-bmi.mod <- lm(bmi ~ age, cohort2)
-plot(cohort2$age,cohort2$bmi)
-mean.bmi <- mean(cohort2$bmi)
-abline(bmi.mod, col="red")
-abline(h=mean.bmi, col="blue")
-summary(bmi.mod)
+    bmi.mod <- lm(bmi ~ sex, cohort1)
+    
+    bmi.mod <- lm(bmi ~ age, cohort2)
+    plot(cohort2$age,cohort2$bmi)
+    mean.bmi <- mean(cohort2$bmi)
+    abline(bmi.mod, col="red")
+    abline(h=mean.bmi, col="blue")
+    summary(bmi.mod)
 #blue line indicate null-hypothesis, positiv slope indicates age affects BMI
 
 ##this plot indicates sex influences BMI
-plot(cohort2$sex,cohort2$bmi)
+    plot(cohort2$sex,cohort2$bmi)
 
 ##linear models with multiple explanatory variables
 
 #plots the BMI by explanatory variables from cohort1
-coplot(bmi~age|sex,cohort1)
+    coplot(bmi~age|sex,cohort1)
 #This plot indicates that sex affects the intersection of BMI, let's examine the slope for men and women:
-summary(lm(bmi~age, sex == "male", data=cohort1))
-summary(lm(bmi~age, sex == "female", data=cohort1))
+    summary(lm(bmi~age, sex == "male", data=cohort1))
+    summary(lm(bmi~age, sex == "female", data=cohort1))
 #from the coeefficiens it appears that for men an increase of 1 year increases BMI with 0,09 abd for women it's 0,11
 #The intersects are different indicating a difference in bmi at the same age
 
 
 # Cohort2----
 #plots the BMI by explanatory variables from cohort2
-coplot(bmi~age|sex,cohort2)
+    coplot(bmi~age|sex,cohort2)
 
 #This plot indicates that sex affects atleast the deviation, let's examine the slope for men and women:
-summary(lm(bmi~age, sex == "male", data=cohort2))
-summary(lm(bmi~age, sex == "female", data=cohort2))
+    summary(lm(bmi~age, sex == "male", data=cohort2))
+    summary(lm(bmi~age, sex == "female", data=cohort2))
 
 ## the second cohort a closer to the true slope value, representing a a larger sample size. It is also
 #noted a larger standard error for women
@@ -128,20 +128,20 @@ summary(lm(bmi~age, sex == "female", data=cohort2))
 #multiple linear regression, notice the difference in slope and intersection. Cohort2 converges towards the true value
 #of bmi at year 40 (know from the equation)
 
-bmiMultiRegression <- lm(bmi~age*sex, cohort1)
-bmiMultiRegression
-plot(cohort1$age, fitted(bmiMultiRegression))
-
-bmiMultiRegression <- lm(bmi~age*sex, cohort2)
-bmiMultiRegression
-plot(cohort2$age, fitted(bmiMultiRegression))
+    bmiMultiRegression <- lm(bmi~age*sex, cohort1)
+    bmiMultiRegression
+    plot(cohort1$age, fitted(bmiMultiRegression))
+    
+    bmiMultiRegression <- lm(bmi~age*sex, cohort2)
+    bmiMultiRegression
+    plot(cohort2$age, fitted(bmiMultiRegression))
 #notice that for females, the age effect is increased by 0,05 per year. Being female however reduces BMI with 0,9
 
 #creates linear models
-bmi.mod <- lm(formula = bmi ~ age, cohort1)
-bmi.mod
+    bmi.mod <- lm(formula = bmi ~ age, cohort1)
+    bmi.mod
 
-bmi.mod <- lm(formula = bmi ~ sex, cohort1)
-bmi.mod
-plot(bmi.mod)
+    bmi.mod <- lm(formula = bmi ~ sex, cohort1)
+    bmi.mod
+    plot(bmi.mod)
 
