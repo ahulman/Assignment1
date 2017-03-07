@@ -3,7 +3,7 @@
 simCohort <- function(N,S){
     set.seed(S)
     ###Jakob
-    id <- c(1:N)
+       id <- c(1:N)
     
     #creates a sex variable for first 600 and appends last 400
     sex <- rep.int(0,N*6/10)
@@ -14,7 +14,7 @@ simCohort <- function(N,S){
     
     dataContinuous$age <- runif(N, min = 40, max = 70)
     
-    dataContinuous$bmi <- ifelse(dataContinuous$sex==0, 21 + 0.1*dataContinuous$age + rnorm(0.6*N, 0 , 2), 20 + 0.15*dataContinuous$age + rnorm(0.4*N, 0 , 2.5))
+    dataContinuous$bmi <- ifelse(dataContinuous$sex==0, 21 + 0.1*dataContinuous$age + rnorm(N, 0 , 2), 20 + 0.15*dataContinuous$age + rnorm(N, 0 , 2.5))
     
         ###OMAR
     #Output data frame
@@ -71,7 +71,7 @@ abline(bmi.mod, col="red")
 abline(h=mean.bmi, col="blue")
 summary(bmi.mod)
 
-bmi.mod <- lm(formula = bmi ~ sex, cohort1)
+bmi.mod <- lm(bmi ~ sex, cohort1)
 
 bmi.mod <- lm(bmi ~ age, cohort2)
 plot(cohort2$age,cohort2$bmi)
@@ -84,14 +84,14 @@ summary(bmi.mod)
 ##this plot indicates sex influences BMI
 plot(cohort2$sex,cohort2$bmi)
 
-#linear models with multiple explanatory variables
+##linear models with multiple explanatory variables
 
 #plots the BMI by explanatory variables from cohort1
 coplot(bmi~age|sex,cohort1)
 #This plot indicates that sex affects the intersection of BMI, let's examine the slope for men and women:
 summary(lm(bmi~age, sex == "male", data=cohort1))
 summary(lm(bmi~age, sex == "female", data=cohort1))
-#from the coeefficiens it appears that for men an increase of 1 year increases BMI with 0,09 abd for women it's 0,17
+#from the coeefficiens it appears that for men an increase of 1 year increases BMI with 0,09 abd for women it's 0,11
 #The intersects are different indicating a difference in bmi at the same age
 
 
@@ -102,9 +102,6 @@ coplot(bmi~age|sex,cohort2)
 #This plot indicates that sex affects atleast the deviation, let's examine the slope for men and women:
 summary(lm(bmi~age, sex == "male", data=cohort2))
 summary(lm(bmi~age, sex == "female", data=cohort2))
-
-summary(lm(bmi~age, sex == "male", data=cohort1))
-summary(lm(bmi~age, sex == "female", data=cohort1))
 
 ## the second cohort a closer to the true slope value, representing a a larger sample size. It is also
 #noted a larger standard error for women
@@ -119,4 +116,4 @@ plot(cohort1$age, fitted(bmiMultiRegression))
 bmiMultiRegression <- lm(bmi~age*sex, cohort2)
 bmiMultiRegression
 plot(cohort2$age, fitted(bmiMultiRegression))
-#notice that for females, the age effect is increased by 0,05 per year. Being female however reduces BMI with 1,21
+#notice that for females, the age effect is increased by 0,05 per year. Being female however reduces BMI with 0,9
