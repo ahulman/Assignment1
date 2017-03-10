@@ -1,3 +1,31 @@
+# Challenge 3 - Trajectory analysis
+In this challenge you will simulate a follow-up study with a similar structure to Whitehall II and then analyse the data.
+
+0. Set the random seed to 123 so that we all get the same results. *set.seed(123)*
+1. Generate a sample of 6021 men and 4107 women with age uniformly distributed between 40 and 60 years at baseline (*age_0*).
+2. Follow-up visits are planned every 5 years, but as in reality they do not happen exactly 5 years apart. Therefore let's add some random noise at each phase the following way. Create a follow-up time variable for each phase: *fup_0* is 0 for everyone, becaause that's baseline. *fup_n*=*fup_0* + 5*n* + *u*, where *n*=1,2,3 and u is a random number from a uniform distribution between -0.5 and 0.5. This way each study phase lasts for a year.
+3. Calculate the corresponding ages at each phase i.e. *age_1*, *age_2*, *age_3*. (*age_0* had already been calculated)
+4. Assuming that the study started in 1990, calculate year of birth for everyone (called it *yob*).
+5. Calculate BMI at each phase using the following equations:
+    * Men: 2.04 + 0.944 age - 0.008 age^2 - 0.08 (yob - 1950) + E, where E is random noise from N(mean=0,sd=3.5)
+    * Women: -14.4 + 1.549 age - 0.013 age^2 - 0.08 (yob - 1950) + E, where E is random noise from N(mean=0,sd=3.5)
+    * Make sure that the random noise is different at each phase, otherwise you will get a perfect quadratic curve for each individual
+    * Age changes from phase to phase, baseline age doesn't!
+6. Simulate loss to follow-up (MCAR assumption, look up what this means) the following way:
+    * Assume that if someone does not attend a phase then (s)he will never return (000x is ok, 0x00 is not ok)
+    * Proportion of participants at each phase, men: 100%, 80%, 70%, 60% (or as close as possible if N is not a whole number)
+    * Proportion of participants at each phase, women: 100%, 90%, 80%, 70%
+    * Hint: generate the data for each phase for everyone, but then change the ones not attending to NA (both age and BMI)
+7. Now you have a so-called wide dataset (each row represents one individual), but for the trajectory analysis, you need to transform it to long format (read more about it in ALDA, p.17, ALDA=Applied Longitudinal Data Analysis). Use the *reshape* function in R.
+8. You are ready to fit the first BMI trajectories, more info on that is coming later...
+
+
+
+
+
+
+
+
 # Challenge 2
 In this challenge you will analyse the dataset generated in the previous step (with some modifications), and also interpret the results. Each one of you works in separate scripts (find them in the project folder).
 
