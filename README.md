@@ -8,10 +8,10 @@ In this challenge you will simulate a follow-up study with a similar structure t
 4. Assuming that the study started in 1990, calculate year of birth for everyone (called it *yob*).
 5. Calculate BMI at each phase using the following equations:
     * Men: 2.04 + 0.944 age - 0.008 age^2 - 0.08 (yob - 1950) + E, where E is random noise from N(mean=0,sd=3.5)
-    * Women: -14.4 + 1.549 age - 0.013 age^2 - 0.08 (yob - 1950) + E, where E is random noise from N(mean=0,sd=3.5)
+    * Women: -14.4 + 1.549 age - 0.013 age^2 + 0.08 (yob - 1950) + E, where E is random noise from N(mean=0,sd=3.5)
     * Make sure that the random noise is different at each phase, otherwise you will get a perfect quadratic curve for each individual
     * Age changes from phase to phase, baseline age doesn't!
-6. Simulate loss to follow-up (MCAR assumption, look up what this means) the following way:
+6. Simulate loss to follow-up (MCAR or MAR assumption? look up what this means) the following way:
     * Assume that if someone does not attend a phase then (s)he will never return (000x is ok, 0x00 is not ok)
     * Proportion of participants at each phase, men: 100%, 80%, 70%, 60% (or as close as possible if N is not a whole number)
     * Proportion of participants at each phase, women: 100%, 90%, 80%, 70%
