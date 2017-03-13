@@ -2,7 +2,7 @@
 In this challenge you will simulate a follow-up study with a similar structure to Whitehall II and then analyse the data.
 
 0. Set the random seed to 123 so that we all get the same results. *set.seed(123)*
-1. Generate a sample of 6021 men and 4107 women with age uniformly distributed between 40 and 60 years at baseline (*age_0*).
+1. Generate a sample of 6021 men and 4107 women with age uniformly distributed between 40 and 60 years at baseline (*age_0*). Sample with replacement from the sequence 40:60 in R, so that you end up with integers.
 2. Follow-up visits are planned every 5 years, but as in reality they do not happen exactly 5 years apart. Therefore let's add some random noise at each phase the following way. Create a follow-up time variable for each phase: *fup_0* is 0 for everyone, becaause that's baseline. *fup_n*=*fup_0* + 5*n* + *u*, where *n*=1,2,3 and u is a random number from a uniform distribution between -0.5 and 0.5. This way each study phase lasts for a year.
 3. Calculate the corresponding ages at each phase i.e. *age_1*, *age_2*, *age_3*. (*age_0* had already been calculated)
 4. Assuming that the study started in 1990, calculate year of birth for everyone (called it *yob*).
