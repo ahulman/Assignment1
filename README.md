@@ -3,6 +3,7 @@ Materials:
    * R codes for all chapters of ALDA: http://stats.idre.ucla.edu/r/examples/alda/
    * All materials, including presentations: http://gseacademic.harvard.edu/alda/
    * I uploaded the code that I explained today to our github (codeCI.R).
+   
 Don't hesitate to e-mail me while I am in Malaga. I will follow your progress on github.
 
 # Challenge 3 - Trajectory analysis
