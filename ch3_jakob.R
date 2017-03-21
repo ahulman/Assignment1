@@ -1,6 +1,7 @@
 
 set.seed(123)
     N <- 10128
+    
     id <- c(1:10128)
     
     
@@ -82,6 +83,10 @@ total$age_2 <- ifelse(total$noshow2=="0", "NA", total$age_2)
 total$BMI_fup3 <- ifelse(total$noshow3=="0", "NA", total$BMI_fup3)
 total$age_3 <- ifelse(total$noshow3=="0", "NA", total$age_3)   
 
+#rename age to age_0
+colnames(total)[3] <- "age_0"
+
 #reshapes a longformat version of database
 library("tidyr", lib.loc="C:/Program Files/R/R-3.3.2/library")
-total_long <- gather(total,age, age_1:age_3)
+total_long <- gather(total, age_at, age, age_0, age_1, age_2, age_3)
+total_long <- gather(total_long, bmi_at, bmi, BMI_fup1, BMI_fup2, BMI_fup3)
