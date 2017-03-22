@@ -11,8 +11,8 @@ set.seed(123)
     
     #creates dataframe from sex and id vectors
     dataContinuous = data.frame("sex" = sex, "id" = id)
-    
-    dataContinuous$age <- sample(40:60,10128, replace = TRUE)
+    dataContinuous$fup_0 <- 1990.5+runif(10128,-0.5,0.5)
+    dataContinuous$age_0 <- sample(40:60,10128, replace = TRUE)
     
     
     dataCategorical = data.frame(sex, id)
@@ -25,23 +25,24 @@ set.seed(123)
     total$sex <- factor (total$sex,
                          levels = c(0, 1),
                          labels = c("male", "female"))
-#follow at 0,5,10, 15 years
-    total$fup_0 <- 0
-    total$fup_1 <- total$fup_0 + 5 + runif(10128,-0.5,0.5)
-    total$fup_2 <- total$fup_0 + 10 + runif(10128,-0.5,0.5)
-    total$fup_3 <- total$fup_0 + 15 + runif(10128,-0.5,0.5)
+    
+    
+    
 #corresponding age
-    total$age_1 <- total$age+ total$fup_1
-    total$age_2 <- total$age+ total$fup_2
-    total$age_3 <- total$age+ total$fup_3
+    total$age_1 <- total$age_0 + 5 + runif(10128,-0.5,0.5)
+    total$age_2 <- total$age_1 + 5 + runif(10128,-0.5,0.5)
+    total$age_3 <- total$age_2 + 5 + runif(10128,-0.5,0.5)
+    
+    #study starts 1990. Calculate yob
+    total$yob <- 1990-total$age_0
+    
 
-#study starts 1990. Calculate yob
-    #install lubridate package
-    library("lubridate", lib.loc="\\\\uni.au.dk/Users/AU191161/Documents/R/win-library/3.3")
-    total$yob <- 1990-total$age
-    total$fup_0 <- 1990.5+runif(10128,-0.5,0.5)
 #calculate BMI at each follow up
-    #mens
+    
+    ifelse(total$sex == "male", 
+           total$BMI_fup0 <- 2.04+0.944*total$age_0 -0.008*(total$age_0)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
+           total$BMI_fup0 <- 14.4 + 1.549*total$age_0 -0.013*(total$age_0)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+    )
     
     
     ifelse(total$sex == "male", 
@@ -74,6 +75,7 @@ set.seed(123)
                             ifelse(total$noshow2 =="0",  0, rbinom(N, 1, 7/8))
                              )       
 #changes values to NA if noshow
+
 total$BMI_fup1 <- ifelse(total$noshow1=="0", "NA", total$BMI_fup1)
 total$age_1 <- ifelse(total$noshow1=="0", "NA", total$age_1)   
 
@@ -83,10 +85,9 @@ total$age_2 <- ifelse(total$noshow2=="0", "NA", total$age_2)
 total$BMI_fup3 <- ifelse(total$noshow3=="0", "NA", total$BMI_fup3)
 total$age_3 <- ifelse(total$noshow3=="0", "NA", total$age_3)   
 
-#rename age to age_0
-colnames(total)[3] <- "age_0"
 
 #reshapes a longformat version of database
-library("tidyr", lib.loc="C:/Program Files/R/R-3.3.2/library")
-total_long <- gather(total, age_at, age, age_0, age_1, age_2, age_3)
-total_long <- gather(total_long, bmi_at, bmi, BMI_fup1, BMI_fup2, BMI_fup3)
+
+total_long <- reshape(total, direction="long", varying= c(list(4:7),list(9:12)), sep = "_", 
+        idvar="id", timevar=c("follow up"))
+        
