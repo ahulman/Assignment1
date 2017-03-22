@@ -8,7 +8,7 @@ id <- c(1:N)
 
 sex <-  c(rep.int(0, 6021), (rep.int(1, 4107))) 
 
-ch3_df <-data(id, sex)
+ch3_df <-data.frame(id, sex)
 
 ch3_df$age_0 <- runif(N, min = 40, max = 70) 
 
@@ -31,37 +31,49 @@ ch3_df$age_2 <- ch3_df$age_0 +  ch3_df$fup_2
 
 ch3_df$age_3 <- ch3_df$age_0 +  ch3_df$fup_3
 
-#Date of examination
+#Year of birth
 
 ch3_df$exam_yr <- runif(N,min=1990, max=1991)
 
+ch3_df$yob <- ch3_df$exam_yr - ch3_df$age_0
+
+# phase specific BMI 
+
+ch3_df$bmi0 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_0 - 0.008 * ch3_df$age_0^2 - 0.08 * (ch3_df$yob - 1950) + rnorm (N, 0, 3.5), 
+                      -14.4 + 1.549 * ch3_df$age_0 - 0.013 * ch3_df$age_0^2 + 0.08 * (ch3_df$yob - 1950) + rnorm(N, 0, 3.5))
+
+ch3_df$bmi1 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_1 - 0.008 * ch3_df$age_1^2 - 0.08 * (ch3_df$yob - 1950) + rnorm (N, 0, 3.5), 
+                      -14.4 + 1.549 * ch3_df$age_1 - 0.013 * ch3_df$age_1^2 + 0.08 * (ch3_df$yob - 1950) + rnorm(N, 0, 3.5))
+
+ch3_df$bmi2 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_2 - 0.008 * ch3_df$age_2^2 - 0.08 * (ch3_df$yob - 1950) + rnorm (N, 0, 3.5), 
+                      -14.4 + 1.549 * ch3_df$age_2 - 0.013 * ch3_df$age_2^2 + 0.08 * (ch3_df$yob - 1950) + rnorm(N, 0, 3.5))
+
+ch3_df$bmi3 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_3 - 0.008 * ch3_df$age_3^2 - 0.08 * (ch3_df$yob - 1950) + rnorm (N, 0, 3.5), 
+                      -14.4 + 1.549 * ch3_df$age_3 - 0.013 * ch3_df$age_3^2 + 0.08 * (ch3_df$yob - 1950) + rnorm(N, 0, 3.5))
 
 
-ch3_df$yob_num <- ch3_df$exam_yr - ch3_df$age_0
-
-ch3_df$yob <- as.Date(ch3_df$yob_num, format= "%Y")
-
-************************************************************
-ch3_df$exam_yr2 <- as.Date(ch3_df$exam_yr, format="%Y")
-
-ch3_df$exam_date <- as.Date(ch3_df$exam_yr, format= "%Y")
+#Lost to follow-up
+ch3_df$fup_1_miss <- ifelse(sex==0, rbinom (N, 1, 0.80), rbinom (N, 1, 0.90))
+ch3_df$fup_2_miss  <- ifelse(sex==0 & ch3_df$fup_1_miss==0, rbinom (N, 1, 0.70), rbinom (N, 1, 0.80))
+ch3_df$fup_3_miss  <- ifelse(sex==0 & ch3_df$fup_1_miss==0 & ch3_df$fup_2_miss==0, rbinom (N, 1, 0.60), rbinom (N, 1, 0.70))
 
 
-ch3_df$exam_yr <- as.numeric(ch3_df$exam_date)
 
 
-#library(lubridate)
+#BMI and age specific follow-up to missing
+ch3_df$bmi1 <- ifelse(ch3_df$fup_1_miss == 0, ch3_df$bmi1== NA, ch3_df$bmi1)
+ch3_df$bmi2 <- ifelse(ch3_df$fup_2_miss == 0, ch3_df$bmi2== NA, ch3_df$bmi2)
+ch3_df$bmi3 <- ifelse(ch3_df$fup_3_miss == 0, ch3_df$bmi3== NA, ch3_df$bmi3)
 
-#Date of birth
-ch3_df$exam_date_num <-  ymd("ch3_df$exam_date")
+ch3_df$age_1 <- ifelse(ch3_df$fup_1_miss == 0, ch3_df$age_1== NA, ch3_df$age_1)
+ch3_df$age_2 <- ifelse(ch3_df$fup_2_miss == 0, ch3_df$age_2== NA, ch3_df$age_2)
+ch3_df$age_3 <- ifelse(ch3_df$fup_3_miss == 0, ch3_df$age_3== NA, ch3_df$age_3)
+
+#Change 0 to missing values
+ch3_df$fup_1_miss[ch3_df$fup_1_miss == 0 & is.numeric(ch3_df$fup_1_miss)] <- NA
+ch3_df$fup_2_miss[ch3_df$fup_2_miss == 0 & is.numeric(ch3_df$fup_2_miss)] <- NA
+ch3_df$fup_3_miss[ch3_df$fup_3_miss == 0 & is.numeric(ch3_df$fup_3_miss)] <- NA
 
 
-ch3_df$yob_num2 <-as.character(ch3_df$yob_num)
-
-
-yob <- Assuming that the study started in 1990 (create an examination "date" for everyone from a uniform distribution between 1990 and 1991) and calculate year of birth for everyone (called it *yob*).
-
-ch3_df$date
-
-table(ch3_df$yob)
-summary(ch3_df$yob_num)
+table()
+summary(ch3_df$bmi1)
