@@ -39,26 +39,26 @@ set.seed(123)
 
 #calculate BMI at each follow up
     
-    ifelse(total$sex == "male", 
-           total$BMI_fup0 <- 2.04+0.944*total$age_0 -0.008*(total$age_0)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           total$BMI_fup0 <- 14.4 + 1.549*total$age_0 -0.013*(total$age_0)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+    total$BMI_fup0 <- ifelse(total$sex == "male", 
+            2.04+0.944*total$age_0 -0.008*(total$age_0^2)-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
+            -14.4 + 1.549*total$age_0 -0.013*((total$age_0)^2)+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )
     
     
-    ifelse(total$sex == "male", 
-           total$BMI_fup1 <- 2.04+0.944*total$age_1-0.008*(total$age_1)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           total$BMI_fup1 <- 14.4 + 1.549*total$age_1-0.013*(total$age_1)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+    total$BMI_fup1 <- ifelse(total$sex=="male", 
+           2.04+0.944*total$age_1-0.008*(total$age_1)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
+           14.4 + 1.549*total$age_1-0.013*(total$age_1)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )            
    
     
-    ifelse(total$sex == "male", 
-           total$BMI_fup2 <- 2.04+0.944*total$age_2-0.008*(total$age_2)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           total$BMI_fup2 <- 14.4 + 1.549*total$age_2-0.013*(total$age_2)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+    total$BMI_fup2 <- ifelse(total$sex == "male", 
+           2.04+0.944*total$age_2-0.008*(total$age_2)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
+           14.4 + 1.549*total$age_2-0.013*(total$age_2)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )    
     
-    ifelse(total$sex == "male", 
-           total$BMI_fup3 <- 2.04+0.944*total$age_3-0.008*(total$age_3)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           total$BMI_fup3 <- 14.4 + 1.549*total$age_3-0.013*(total$age_3)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+    total$BMI_fup3 <- ifelse(total$sex == "male", 
+           2.04+0.944*total$age_3-0.008*(total$age_3)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
+           14.4 + 1.549*total$age_3-0.013*(total$age_3)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )   
     
 #simulate loss to follow-up
@@ -91,3 +91,4 @@ total$age_3 <- ifelse(total$noshow3=="0", "NA", total$age_3)
 total_long <- reshape(total, direction="long", varying= c(list(4:7),list(9:12)), sep = "_", 
         idvar="id", timevar=c("follow up"))
         
+
