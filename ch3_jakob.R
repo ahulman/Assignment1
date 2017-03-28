@@ -47,18 +47,18 @@ set.seed(123)
     
     total$BMI_fup1 <- ifelse(total$sex=="male", 
            2.04+0.944*total$age_1-0.008*(total$age_1)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           14.4 + 1.549*total$age_1-0.013*(total$age_1)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+           -14.4 + 1.549*total$age_1-0.013*(total$age_1)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )            
    
     
     total$BMI_fup2 <- ifelse(total$sex == "male", 
            2.04+0.944*total$age_2-0.008*(total$age_2)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           14.4 + 1.549*total$age_2-0.013*(total$age_2)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+           -14.4 + 1.549*total$age_2-0.013*(total$age_2)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )    
     
     total$BMI_fup3 <- ifelse(total$sex == "male", 
            2.04+0.944*total$age_3-0.008*(total$age_3)^2-0.08*(total$yob -1950) + rnorm(N, 0, 3.5), 
-           14.4 + 1.549*total$age_3-0.013*(total$age_3)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
+           -14.4 + 1.549*total$age_3-0.013*(total$age_3)^2+ 0.08*(total$yob-1950) + rnorm(N, 0, 3.5)
     )   
     
 #simulate loss to follow-up
@@ -86,9 +86,73 @@ total$BMI_fup3 <- ifelse(total$noshow3=="0", "NA", total$BMI_fup3)
 total$age_3 <- ifelse(total$noshow3=="0", "NA", total$age_3)   
 
 
-#reshapes a longformat version of database
+#reshapes into a longformat version of database
 
 total_long <- reshape(total, direction="long", varying= c(list(4:7),list(9:12)), sep = "_", 
         idvar="id", timevar=c("follow up"))
         
+#challenge 4
+
+# code recycled from Dorte Vistisen
+library(nlme) # fits mixed-effects models
+library(cmprsk)
+library(Epi)
+
+#Cuadraticand cuboc terms of age
+total_long$age_0 <- as.numeric(total_long$age_0)
+total_long$BMI_fup0 <- as.numeric(total_long$BMI_fup0)
+total_long$age_squared <-total_long$age_0^2
+total_long$age_qubic <-total_long$age_0^3
+
+
+bmi_traj <- lme(BMI_fup0 ~ age_0*sex  + age_squared*sex + age_qubic*sex + age_0 + sex, random= ~ 1|id, data = total_long, method="ML", na.action=na.omit)
+
+summary(bmi_traj)
+summary(total_long$BMI_fup0)
+
+x <- seq(15,45, by=1)
+
+x.pred1 <- cbind(1,x,0,x^2,x^3,0, 0, 0)  
+x.pred2 <- cbind(1,x,1,x^2,x^3,x, x^2,x^3)
+
+newdata <- rbind(x.pred1, x.pred2)
+
+preddata <- matrix(data = NA, nrow = 0, ncol = 5)  #initialising matrix of predictions
+
+for (j in 1:2){                                                     
+    
+    index1 <- 1 + (j-1)*(dim(newdata)[1])/2                                 
+    index2 <- j*(dim(newdata)[1])/2
+    
+    y.pred <- newdata[index1:index2,] %*% fixef(bmi_traj)    #predicted values
+    
+    y.se <- ci.lin(bmi_traj,newdata[index1:index2,])[,2]     #std err of the mean
+    y.cil <- y.pred - 1.96*y.se                         #lower ci of mean
+    y.ciu <- y.pred + 1.96*y.se                         #upper ci of mean
+    
+    temp <- cbind(x,y.pred,y.cil,y.ciu,j)               #saving predictions with CI for class "j"
+    preddata <- rbind(preddata,temp)                    #appending predictions for all groups
+}
+
+# create data frame object with meaningful column names
+preddata <- data.frame(preddata)
+names(preddata) <- c("age","bmi","lcb","ucb","sex")
+plot(preddata$age, preddata$lcb)
+
+# create an initial empty plot
+col1 <- rgb(76, 89, 136, 255, maxColorValue = 255) # blue, Diabetologia style
+col2 <- rgb(193, 88, 88, 255, maxColorValue = 255) # red, Diabetologia style
+
+plot(c(0,0), xlab = "Age (year)", ylab = "BMI (kg/m2)", xlim = c(40,80), ylim = c(15,50), xaxt="n",yaxt="n",bty = "n")
+# define x and y axis
+axis(1, at = seq(40, 80, 10))
+axis(2,at = seq(15,50,5), las=1, cex=2)
+# add points by sex
+points(preddata[preddata$sex=="1",c("age","bmi")], col = col1)
+points(preddata[preddata$sex=="2",c("age","bmi")], col = col1)
+#points(cohort1[cohort1$sex=="female",c("age","bmi")], col = col2)
+#lines(agePred,pred[1:2], col = col1)
+#lines(agePred,pred[3:4], col = col2)
+#legend(40,32, c("Men","Women"), col = c(col1,col2), pch = 1)
+
 
