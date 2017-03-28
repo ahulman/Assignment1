@@ -51,23 +51,19 @@ ch3_df$bmi_2 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_2 - 0.008 * ch3_df$age_
 ch3_df$bmi_3 <- ifelse(sex==0, 2.04 + 0.944 * ch3_df$age_3 - 0.008 * ch3_df$age_3^2 - 0.08 * (ch3_df$yob - 1950) + rnorm (N, 0, 3.5), 
                       -14.4 + 1.549 * ch3_df$age_3 - 0.013 * ch3_df$age_3^2 + 0.08 * (ch3_df$yob - 1950) + rnorm(N, 0, 3.5))
 
-<<<<<<< HEAD
 #Lost to follow-up identifyed with 0
 ch3_df$fup_3_miss <- ifelse(ch3_df$sex==0, rbinom (N, 1, 0.60), rbinom (N, 1, 0.70))
 ch3_df$fup_2_miss <- ifelse((ch3_df$fup_3_miss==0 & ch3_df$sex==0), rbinom (N, 1, 0.70), rbinom (N, 1, 0.80))
 ch3_df$fup_1_miss <- ifelse(ch3_df$sex==0 & ch3_df$fup_2_miss==0, rbinom (N, 1, 0.80), rbinom (N, 1, 0.90))
 
-=======
 #Lost to follow-up
 ch3_df$fup_1_miss <- ifelse(sex==0, rbinom (N, 1, 0.80), rbinom (N, 1, 0.90))
 ch3_df$fup_2_miss  <- ifelse(sex==0 & ch3_df$fup_1_miss==0, rbinom (N, 1, 0.70), rbinom (N, 1, 0.80))
 ch3_df$fup_3_miss  <- ifelse(sex==0 & ch3_df$fup_1_miss==0 & ch3_df$fup_2_miss==0, rbinom (N, 1, 0.60), rbinom (N, 1, 0.70))
->>>>>>> 87a1a3c71cf53c7f68c0f620e404d796bf8dcd6f
 
 
 #BMI and age specific follow-up to missing
 ch3_df$bmi_1 <- ifelse(ch3_df$fup_1_miss==0, ch3_df$bmi_1==NA, ch3_df$bmi_1)
-<<<<<<< HEAD
 ch3_df$bmi_2 <- ifelse(ch3_df$fup_1_miss==0, ch3_df$bmi_2==NA, ch3_df$bmi_2)
 ch3_df$bmi_3 <- ifelse(ch3_df$fup_1_miss==0, ch3_df$bmi_3==NA, ch3_df$bmi_3)
 
@@ -91,14 +87,12 @@ ch3_df$fup_3_miss <- ifelse(ch3_df$fup_1_miss==0, ch3_df$fup_3_miss==NA, ch3_df$
 ch3_df$fup_2_miss <- ifelse(ch3_df$fup_1_miss==0, ch3_df$fup_2_miss==NA, ch3_df$fup_2_miss)
 ch3_df$fup_3_miss <- ifelse(ch3_df$fup_2_miss==0, ch3_df$fup_3_miss==NA, ch3_df$fup_3_miss)
 
-=======
 ch3_df$bmi_2 <- ifelse(ch3_df$fup_2_miss==0, ch3_df$bmi_2==NA, ch3_df$bmi_2)
 ch3_df$bmi_3 <- ifelse(ch3_df$fup_3_miss==0, ch3_df$bmi_3==NA, ch3_df$bmi_3)
 
 ch3_df$age_1 <- ifelse(ch3_df$fup_1_miss == 0, ch3_df$age_1 == NA, ch3_df$age_1)
 ch3_df$age_2 <- ifelse(ch3_df$fup_2_miss == 0, ch3_df$age_2 == NA, ch3_df$age_2)
 ch3_df$age_3 <- ifelse(ch3_df$fup_3_miss == 0, ch3_df$age_3 == NA, ch3_df$age_3)
->>>>>>> 87a1a3c71cf53c7f68c0f620e404d796bf8dcd6f
 
 ch3_df$fup_1_miss[ch3_df$fup_1_miss == 0 & is.numeric(ch3_df$fup_1_miss)] <- NA
 ch3_df$fup_2_miss[ch3_df$fup_2_miss == 0 & is.numeric(ch3_df$fup_2_miss)] <- NA
@@ -119,13 +113,14 @@ ch3_long$age2 <-ch3_long$age^2
 ch3_long$age3 <-ch3_long$age^3
 
 
-ch3_long$bmi_t <- lme(ch3_long$bmi ~ ch3_long$age*ch3_long$sex  + ch3_long$age2*ch3_long$sex + ch3_long$age3*ch3_long$sex + ch3_long$age +ch3_long$sex, random= ~ 1|che3_long$id, data = ch3_long, method="ML", na.action=na.omit)
+bmi_traj <- lme(bmi ~ age*sex  + age2*sex + age3*sex + age + sex, random= ~ 1|id, data = ch3_long, method="ML", na.action=na.omit)
 
-summary(mGluc_f)
-x <- seq(-20,0,by=0.5)
+summary(bmi_traj)
 
-x.pred1 <- cbind(1,x,0,x^2,x^3,0,0,0,0,0,0,0,0,0,0,0,0)  
-x.pred2 <- cbind(1,x,1,x^2,x^3,0,0,0,0,0,0,0,0,0,x,x^2,x^3)
+x <- seq(40,86, by=1)
+
+x.pred1 <- cbind(1,x,0,x^2,x^3,0, 0, 0)  
+x.pred2 <- cbind(1,x,1,x^2,x^3,x, x^2,x^3)
 
 newdata <- rbind(x.pred1, x.pred2)
 
@@ -136,9 +131,9 @@ for (j in 1:2){
     index1 <- 1 + (j-1)*(dim(newdata)[1])/2                                 
     index2 <- j*(dim(newdata)[1])/2
     
-    y.pred <- newdata[index1:index2,] %*% fixef(mGluc_f)    #predicted values
+    y.pred <- newdata[index1:index2,] %*% fixef(bmi_traj)    #predicted values
     
-    y.se <- ci.lin(mGluc_f,newdata[index1:index2,])[,2]     #std err of the mean
+    y.se <- ci.lin(bmi_traj,newdata[index1:index2,])[,2]     #std err of the mean
     y.cil <- y.pred - 1.96*y.se                         #lower ci of mean
     y.ciu <- y.pred + 1.96*y.se                         #upper ci of mean
     
@@ -148,27 +143,8 @@ for (j in 1:2){
 
 # create data frame object with meaningful column names
 preddata <- data.frame(preddata)
-names(preddata) <- c("time","y","cil","ciu","class")
+names(preddata) <- c("age","bmi","lcb","ucb","sex")
 
-
-
-
-
-
-
-
-ch3_long <- reshape (che3_df, varying = c("ch3_df$age_0", "ch3_df$age_1", "ch3_df$age_2", "ch3_df$age_3", "ch3_df$bmi_0", "ch3_df$bmi_1", 
-                        "ch3_df$bmi_2", "ch3_df$bmi_3"), timevar = "che3_df$fup", v.names = NULL, idvar = "id", 
-                     drop = c("ch3_df$fup_1_miss", "ch3_df$fup_2_miss", "ch3_df$fup_3_miss", "ch3_df$yob", "ch3_df$exam_yr"), 
-                     direction = "long", new.row.names = NULL, sep = "_")
-
-ch3_long <- reshape (che3_df, varying = c(ch3_df$age_0, ch3_df$age_1, ch3_df$age_2, ch3_df$age_3, ch3_df$bmi_0, ch3_df$bmi_1, ch3_df$bmi_2,
-            ch3_df$bmi_3), timevar = che3_df$fup, v.names = NULL, idvar = id, drop = c(ch3_df$fup_1_miss, ch3_df$fup_2_miss, 
-            ch3_df$fup_3_miss, ch3_df$yob, ch3_df$exam_yr), direction = "long", new.row.names = NULL, sep = "_")
-
-ch3_long <- reshape (che3_df, varying = c("age_0", "age_1", "age_2", "age_3", "bmi_0", "bmi_1", "bmi_2",
-                                          "bmi_3"), timevar = che3_df$fup, v.names = NULL, idvar = id, drop = c(ch3_df$fup_1_miss, ch3_df$fup_2_miss, 
-                                                                                                                     ch3_df$fup_3_miss, ch3_df$yob, ch3_df$exam_yr), direction = "long", new.row.names = NULL, sep = "_")
 
 table()
 summary(ch3_df$bmi_1)
