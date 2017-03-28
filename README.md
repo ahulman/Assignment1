@@ -1,4 +1,4 @@
-# Challenge 4 - Trajectory analysis (continued)
+# Challenge 4 - Trajectory analysis (continued) BUT WHAT
 Materials:
    * R codes for all chapters of ALDA: http://stats.idre.ucla.edu/r/examples/alda/
    * All materials, including presentations: http://gseacademic.harvard.edu/alda/
