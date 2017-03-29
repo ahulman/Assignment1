@@ -110,7 +110,7 @@ bmi_traj <- lme(BMI_fup0 ~ age_0*sex  + age_squared*sex + age_qubic*sex + age_0 
 summary(bmi_traj)
 summary(total_long$BMI_fup0)
 
-x <- seq(15,45, by=1)
+x <- seq(40,75, by=1)
 
 x.pred1 <- cbind(1,x,0,x^2,x^3,0, 0, 0)  
 x.pred2 <- cbind(1,x,1,x^2,x^3,x, x^2,x^3)
@@ -137,22 +137,19 @@ for (j in 1:2){
 # create data frame object with meaningful column names
 preddata <- data.frame(preddata)
 names(preddata) <- c("age","bmi","lcb","ucb","sex")
-plot(preddata$age, preddata$lcb)
 
-# create an initial empty plot
-col1 <- rgb(76, 89, 136, 255, maxColorValue = 255) # blue, Diabetologia style
-col2 <- rgb(193, 88, 88, 255, maxColorValue = 255) # red, Diabetologia style
-
-plot(c(0,0), xlab = "Age (year)", ylab = "BMI (kg/m2)", xlim = c(40,80), ylim = c(15,50), xaxt="n",yaxt="n",bty = "n")
-# define x and y axis
-axis(1, at = seq(40, 80, 10))
-axis(2,at = seq(15,50,5), las=1, cex=2)
-# add points by sex
-points(preddata[preddata$sex=="1",c("age","bmi")], col = col1)
-points(preddata[preddata$sex=="2",c("age","bmi")], col = col1)
-#points(cohort1[cohort1$sex=="female",c("age","bmi")], col = col2)
-#lines(agePred,pred[1:2], col = col1)
-#lines(agePred,pred[3:4], col = col2)
-#legend(40,32, c("Men","Women"), col = c(col1,col2), pch = 1)
+# add points by sex=1
+plot(preddata[preddata$sex=="1", c("age", "bmi")], col = col1, xlab = "Age (year)", ylab = "BMI (kg/m2)")
+lines(preddata[preddata$sex=="1", c("age", "bmi")], col = col1)
+points(preddata[preddata$sex=="1", c("age", "lcb")], col = col1)
+points(preddata[preddata$sex=="1", c("age", "ucb")], col = col1)
+#adds text
+mtext("men", col = col1)
+mtext("women", col = col2, line = 1)
+# add points by sex=2
+points(preddata[preddata$sex=="2", c("age", "bmi")], col = col2)
+lines(preddata[preddata$sex=="2", c("age", "bmi")], col = col2)
+points(preddata[preddata$sex=="2", c("age", "lcb")], col = col2)
+points(preddata[preddata$sex=="2", c("age", "ucb")], col = col2)
 
 
