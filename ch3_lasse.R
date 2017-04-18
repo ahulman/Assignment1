@@ -218,4 +218,4 @@ lines(preddata[preddata$sex==2,c("age","bmi")], col = "blue")
 lines(preddata[preddata$sex==1,c("age","bmi")], col = "red")
 legend(40,32.5, c("Men","Women"), col = c("blue","red"), pch = 1)
 
-# challenge 5
+#challenge 5
