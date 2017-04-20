@@ -24,7 +24,7 @@ m1 <- lme(logbilir ~ drug , random = ~ 1|id , data = pbc2 , method = "ML" , na.a
 summary(m1)
 
 #pbc2$year: number of years between enrollment and this visit date.
-m2 <- lme(logbilir ~ drug * year , random = ~ 1|id , data = pbc2 , method = "ML" , na.action = na.omit)
+m2 <- lme(logbilir ~ year * drug , random = ~ 1|id , data = pbc2 , method = "REML" , na.action = na.omit)
 summary(m2)
 summary(pbc2$year)
 
@@ -59,14 +59,14 @@ names(preddata) <- c("time","logbilir","cil","ciu","drug")
 #drawing some figures of the results
 plot(c(0,0) , main = "bmi trajectorie", xlab = "years from start" , ylab = "log bilirubin" ,
      xlim = c(0,15),
-     ylim = c(-5,5),
+     ylim = c(-2,2),
 )
 # add points by sex
 points(preddata[preddata$drug==1 ,c("time","logbilir")], col = "blue")
 points(preddata[preddata$drug==2,c("time","logbilir")], col = "red")
 lines(preddata[preddata$drug==1 ,c("time","logbilir")], col = "blue")
 lines(preddata[preddata$drug==2,c("time","logbilir")], col = "red")
-legend(0,4, c("placebo","drug"), col = c("blue","red"), pch = 1)
+legend(0,2, c("placebo","drug"), col = c("blue","red"), pch = 1)
 
 #confidence intercal is also plotted
 lines(preddata[preddata$drug==1 ,c("time","cil")], col = "blue")
