@@ -7,7 +7,7 @@ summary(pbc2)
 
 # Outcome: log-transformed serum bilirubin.
 # Explore the three different time-scales (if you think a priori that some of them 
-#donâ€™t make sense then argue instead of fitting the model).
+#donât make sense then argue instead of fitting the model).
 #     Time since entry at visit date - most appropriaye 
 #     age at vist date
 #     chronolgic calendar time
