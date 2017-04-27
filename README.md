@@ -1,4 +1,19 @@
-# Challenge 4 - Trajectory analysis (continued) BUT WHAT
+# Challenge 6 (trajectory before event occurence)
+  * Check out whether the deceased or the transplant group is larger and keep that for the rest of the exercise
+  * Set time=0 at event occurence and fit log-serum bilirubin trajectories "backwards in time" (see Tabak et al., Lancet 2009)
+  * Compare the treatment and the placebo group
+  * Let me know if something is not clear
+We aim to discuss your solutions next Thursday (May 4). If any urgent matter comes up that limits your ability to work on the project, let me know in time. 
+
+
+# Challenge 5 (most of you have done it already)
+The dataset is in the JM package and is called pbc2 (there are other datasets with similar name, but use this one).
+Outcome: log-transformed serum bilirubin.
+Trajectory: do at least a linear analysis, but you can test non-linear relationships too (maybe a scatterplot could help to decide)
+Explore the three different time-scales (if you think a priori that some of them don’t make sense then argue instead of fitting the model).
+The main aim is to assess the effect of treatment compared to placebo. 
+
+# Challenge 4 - Trajectory analysis (continued)
 Materials:
    * R codes for all chapters of ALDA: http://stats.idre.ucla.edu/r/examples/alda/
    * All materials, including presentations: http://gseacademic.harvard.edu/alda/
