@@ -3,6 +3,7 @@
   * Set time=0 at event occurence and fit log-serum bilirubin trajectories "backwards in time" (see Tabak et al., Lancet 2009)
   * Compare the treatment and the placebo group
   * Let me know if something is not clear
+
 We aim to discuss your solutions next Thursday (May 4). If any urgent matter comes up that limits your ability to work on the project, let me know in time. 
 
 
