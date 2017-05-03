@@ -12,7 +12,7 @@ pbc2 <- data.frame (pbc2)
 
 pbc2$logserbil <- log(pbc2$serBilir)
 
-pbc2$t0 <- pbc2$years-pbc2$year
+pbc2$t0 <- pbc2$year-pbc2$years
 
 #Trajectories
 model1 <- lme(logserbil ~ t0*drug + sex,random=~1|id, data=pbc2, method="ML", na.action=na.omit)
@@ -21,7 +21,7 @@ ci.lin(model1)
 
 #Figure 
 par(mfrow=c(1,1))
-x <- seq(0,15,by=1)                                           #range of time
+x <- seq(-15,0,by=1)                                           #range of time
 
 x.pred1 <- cbind(1,x, 0, 0,0)      # class 1
 x.pred2 <- cbind(1,x, 1, 0,x)  # class 2
@@ -54,10 +54,10 @@ cols <- c("black", "gray")
 
 xlab = expression('Years')
 
-plot(c(-9),c(-9),type="l",xlab="Years", ylab=expression('Log serum bilirrubin'), xlim=c(0,15), ylim=c(-2,2.5),lwd=3,xaxt="n",yaxt="n")
+plot(c(-9),c(-9),type="l",xlab="Years", ylab=expression('Log serum bilirrubin'), xlim=c(-15,0), ylim=c(-1,2.5),lwd=3,xaxt="n",yaxt="n")
 title("Model 1")
-axis(1,at=seq(0,15,1), labels = seq(0, 15, 1))
-axis(2,at=seq(-2,2.5,0.5))
+axis(1,at=seq(-15,0,1), labels = seq(-15,0, 1))
+axis(2,at=seq(-1, 2.5, 0.5))
 
 for (i in 1:2) {
     lines(preddata$time[preddata$class==i],
