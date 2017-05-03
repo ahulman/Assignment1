@@ -11,6 +11,7 @@
 library(nlme) # fits mixed-effects models
 library(cmprsk)
 library(Epi)
+library(JM)
 #create a log-transformed serum bilirrubin
 #explore
 data <- pbc2
@@ -25,7 +26,7 @@ summary(model1)
 
 x <- seq(0,15, by=1)
 
-x.pred1 <- cbind(1,0,x,0,x^2,x^2)  
+x.pred1 <- cbind(1,0,x,x^2,x,x^2)  
 x.pred2 <- cbind(1,1,x,1,x^2,x^2)
 
 newdata <- rbind(x.pred1, x.pred2)
