@@ -1,3 +1,15 @@
+# Week 18
+## Session overview
+  * We discussed briefly the role of random effects in our models from the last few weeks (check out Chapter 4 in ALDA or the presentation at the following link: http://gseacademic.harvard.edu/alda/)
+  * We checked the solutions of Challenge 6
+  * EXTRA: If you have the time and interest, check out this paper on piecewise models (when we are not only analysing what happened before the event, but also after) http://isites.harvard.edu/fs/docs/icb.topic1250132.files/ije.pdf
+## For next week (May 11)
+As three of us will be at EDEG, there is no assignment in the usual way, BUT we agreed on that
+ * Omar and Lasse will give a brief practical overview  of the LEAD symposium
+ * Jakob will talk about the use of the aggregate() function
+ * Adam will upload a script how to create a very detailed, nice figure using base graphics in R
+ 
+
 # Challenge 6 (trajectory before event occurence)
   * Check out whether the deceased or the transplant group is larger and keep that for the rest of the exercise
   * Set time=0 at event occurence and fit log-serum bilirubin trajectories "backwards in time" (see Tabak et al., Lancet 2009)
