@@ -1,3 +1,16 @@
+# Week 20
+We will talk about RMarkdown, a useful tool if we want to do reproducible research. Please be familiar with the basic concept by Thursday (understand at least the markdown template in RStudio - the document that is automatically generated when you create a new markdown document in RStudio).
+
+A few materials:
+ * http://rmarkdown.rstudio.com/lesson-1.html
+ * https://www.rstudio.com/resources/webinars/the-ecosystem-of-r-markdown/
+ * https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf
+ * Coursera
+
+
+# Week 19
+Luke Johnston (UoT) talked about package development using the devtools package.
+
 # Week 18
 ### Session overview
   * We discussed briefly the role of random effects in our models from the last few weeks (check out Chapter 4 in ALDA or the presentation at the following link: http://gseacademic.harvard.edu/alda/)
