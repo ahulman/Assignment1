@@ -1,3 +1,19 @@
+# Week 22
+Adam presented useful features of RMarkdown and introduced the carpenter package from Luke Johnston.
+Useful materials:
+ * RMarkdown cheat sheet https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf
+ * carpenter github https://github.com/lwjohnst86/carpenter
+ * carpenter vignette https://htmlpreview.github.io/?https://github.com/lwjohnst86/carpenter/blob/master/vignettes/carpenter.html
+ 
+ **Task for next week:** create an RMarkdown document (preferably pdf so that you go through the Tex installation process) that includes common building blocks:
+  * figure
+  * table (use the carpenter package)
+  * etc. (experiment with links, lists, maybe interactivity)
+  
+ 
+ 
+# Week 21 - Thu is holiday
+
 # Week 20
 We will talk about RMarkdown, a useful tool if we want to do reproducible research. Please be familiar with the basic concept by Thursday (understand at least the markdown template in RStudio - the document that is automatically generated when you create a new markdown document in RStudio).
 
