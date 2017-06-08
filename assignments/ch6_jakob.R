@@ -16,13 +16,13 @@
     #* Set time=0 at event occurence and fit log-serum bilirubin trajectories "backwards in time" (see Tabak et al., Lancet 2009)
     dataDead$yearsBeforeEvent <- dataDead$year - dataDead$years
     
-    model1 <- lme(logbilirubin ~ drug*yearsBeforeEvent + sex*yearsBeforeEvent , data = dataDead, random= ~ 1|id, method="REML", na.action=na.omit)
+    model1 <- lme(logbilirubin ~ drug*yearsBeforeEvent , data = dataDead, random= ~ 1|id, method="REML", na.action=na.omit)
     summary(model1)
     
     x <- seq(-15,0, by=1)
     
-    x.pred1 <- cbind(1,0,x,0,0,0)  
-    x.pred2 <- cbind(1,1,x,1,x,x)
+    x.pred1 <- cbind(1,0,x,0)  
+    x.pred2 <- cbind(1,1,x,x)
     
     newdata <- rbind(x.pred1, x.pred2)
     
