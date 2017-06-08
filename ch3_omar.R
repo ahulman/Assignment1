@@ -1,4 +1,5 @@
 ## Challenge 3
+getwd()
 
 set.seed(123)
 
@@ -132,15 +133,38 @@ names(preddata) <- c("age","bmi","lcb","ucb","sex")
 col1 <- rgb(76, 89, 136, 255, maxColorValue = 255) # blue, Diabetologia style
 col2 <- rgb(193, 88, 88, 255, maxColorValue = 255) # red, Diabetologia style
 
-plot(c(0,0), xlab = "Age (year)", ylab = "BMI (kg/m2)", xlim = c(40,86), ylim = c(11,45), xaxt="n",yaxt="n",bty = "n")
+plot(c(0,0), xlab = "Age (year)", ylab = "BMI (kg/m2)", xlim = c(40,90), ylim = c(20,32), xaxt="n",yaxt="n",bty = "n")
+
 # define x and y axis
 axis(1, at = seq(0, 87, 5))
-axis(2,at = seq(0, 40,5), las=1, cex=2)
+axis(2,at = seq(0, 40,2), las=1, cex=2)
+
 # add points by sex
 lines(preddata[preddata$sex=="1",c("age","bmi")], col = col1)
-lines(preddata[preddata$sex=="2",c("age","bmi")], col = col1)
-legend(60,45, c("Men","Women"), col = c(col1,col2), pch = 1)
+lines(preddata[preddata$sex=="2",c("age","bmi")], col = col2)
+legend(40, 22, c("Men","Women"), col = c(col1,col2), pch = 1)
 
 
+# CIs
+for (i in 1:2) {
+  lines(preddata$age[preddata$sex==i],
+        preddata$lcb[preddata$sex==i],
+        lwd=1,lty=2,col=col[i])
+  lines(preddata$age[preddata$sex==i],
+        preddata$ucb[preddata$sex==i],
+        lwd=1,lty=2,col=col[i])
+}
 
+lines(preddata$age[preddata$sex==1],
+      preddata$lcb[preddata$sex==1],
+      lwd=1,lty=2,col=col1)
+lines(preddata$age[preddata$sex==1],
+      preddata$ucb[preddata$sex==1],
+      lwd=1,lty=2,col=col1)
 
+lines(preddata$age[preddata$sex==2],
+      preddata$lcb[preddata$sex==2],
+      lwd=1,lty=2,col=col2)
+lines(preddata$age[preddata$sex==2],
+      preddata$ucb[preddata$sex==2],
+      lwd=1,lty=2,col=col2)
