@@ -1,0 +1,189 @@
+---
+title: "Forcats....miauuu"
+author: "Omar Silverman"
+date: "July 5, 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(forcats)
+gss_cat
+
+```
+
+## Forcats package. Tools for Working with Categorical Variables (Factors), for:
+#    1- Reordering factor levels (including moving specified levels to front, ordering by first              appearance, reversing, and randomly shuffling), 
+#    2- Modifying factor levels (including collapsing rare levels into other, 'anonymising', and             manually 'recoding').
+
+##as_factor. Convert input to a factor.
+#Compared to base R, this function creates levels in the order in which they appear, which will be
+#the same on every platform (base R sorts in the current locale which can vary from place to place).
+```{r warning=FALSE}
+x <- c("a", "z", "g")
+as_factor(x)
+as.factor(x)
+```
+## fct_c. Concatenate factors, combining levels
+#This is useful way of patching together factors from multiple sources that really should have the
+#same levels but don’t.
+```{r warning=FALSE}
+fa <- factor("a")
+fb <- factor("b")
+fab <- factor(c("a", "b"))
+c(fa, fb, fab)
+fct_c(fa, fb, fab)
+```
+##fct_collapse. Collapse factor levels into manually defined groups
+```{r include = FALSE}
+as_factor (gss_cat$partyid)
+```
+
+```{r warning=FALSE}
+fct_count(gss_cat$partyid)
+is.factor(gss_cat$partyid)
+gss_cat$partyid2 <- fct_collapse(gss_cat$partyid,
+missing = c("No answer", "Don't know"),
+other = "Other party",
+rep = c("Strong republican", "Not str republican"),
+ind = c("Ind,near rep", "Independent", "Ind,near dem"),
+dem = c("Not str democrat", "Strong democrat")
+)
+fct_count(gss_cat$partyid2)
+
+```
+##  fct_count. Count entries in a factor
+```{r warning=FALSE}
+f <- factor(sample(letters)[rpois(1000, 10)])
+table(f)
+fct_count(f)
+fct_count(f, sort = TRUE)
+```
+## fct_drop. Drop unused levels
+# Compared to base::droplevels() does not drop NA levels that have values.
+```{r warning=FALSE}
+f <- factor(c("a", "b"), levels = c("a", "b", "c"))
+f
+fct_drop(f)
+
+# Set only to restrict which levels to drop
+fct_drop(f, only = "a")
+fct_drop(f, only = "c")
+```
+## fct_expand. Add additional levels to a factor
+```{r warning=FALSE}
+f <- factor(sample(letters[1:3], 20, replace = TRUE))
+f
+fct_expand(f, "d", "e", "f")
+fct_expand(f, letters[1:6])
+```
+##fct_explicit_na. Make missing values explicit
+#This gives missing value an explicit factor level, ensuring that they appear in summaries and on
+#plots.
+```{r warning=FALSE}
+f1 <- factor(c("a", "a", NA, NA, "a", "b", NA, "c", "a", "c", "b"))
+table(f1)
+f2 <- fct_explicit_na(f1)
+table(f2)
+```
+## fct_inorder. Reorder factors levels by first appearance or frequency
+```{r warning=FALSE}
+f <- factor(c("b", "b", "a", "c", "c", "c"))
+f
+fct_inorder(f)
+fct_infreq(f)
+fct_inorder(f, ordered = TRUE)
+```
+## fct_other. Replace levels with "other"
+```{r warning=FALSE}
+x <- factor(rep(LETTERS[1:9], times = c(40, 10, 5, 27, 1, 1, 1, 1, 1)))
+fct_other(x, keep = c("A", "B"))
+fct_other(x, drop = c("A", "B"))
+```
+## fct_recode. Change factor levels by hand
+```{r warning=FALSE}
+x <- factor(c("apple", "bear", "banana", "dear"))
+fct_recode(x, fruit = "apple", fruit = "banana")
+# If you make a mistake you'll get a warning
+fct_recode(x, fruit = "apple", fruit = "bananana")
+# If you name the level NULL it will be removed
+fct_recode(x, NULL = "apple", fruit = "banana")
+```
+## fct_relabel. Automatically relabel factor levels, collapse as necessary
+#A function that is applied to each level. Must accept one character argument and
+#return a character vector of the same length as its input.
+```{r warning=FALSE}
+fct_count(gss_cat$rincome)
+convert_income <- function(x) {
+regex <- "^(?:Lt |)[$]([0-9]+).*$"
+is_range <- grepl(regex, x)
+num_income <- as.numeric(gsub(regex, "\\1", x[is_range]))
+num_income <- trunc(num_income / 5000) * 5000
+x[is_range] <- paste0("Gt $", num_income)
+x
+}
+convert_income(levels(gss_cat$rincome))
+rincome2 <- fct_relabel(gss_cat$rincome, convert_income)
+fct_count(rincome2)
+```
+## fct_relevel.Reorder factor levels by hand
+#This is a generalisaton of stats::relevel() that allows you to move any number of levels to any
+#location.
+```{r warning=FALSE}
+f <- factor(c("a", "b", "c", "d"))
+fct_relevel(f)
+fct_relevel(f, "c")
+fct_relevel(f, "b", "a")
+# Move to the third position
+fct_relevel(f, "a", after = 2)
+# Relevel to the end
+fct_relevel(f, "a", after = Inf)
+fct_relevel(f, "a", after = 3)
+# Using 'Inf' allows you to relevel to the end when the number of levels is unknown or variable (e.g. vectorised operations)
+
+df <- forcats::gss_cat[, c("rincome", "denom")]
+lapply(df, levels)
+df2 <- lapply(df, fct_relevel, "Don't know", after = Inf)
+lapply(df2, levels)
+# You'll get a warning if the levels don't exist
+fct_relevel(f, "e")
+
+```
+## fct_reorder. Reorder factor levels by sorting along another variable
+#Is useful for 1d displays where the factor is mapped to position; fct_reorder2 for 2d displays where the factor is mapped to a non-position aesthetic
+```{r warning=FALSE}
+boxplot(Sepal.Width ~ Species, data = iris)
+boxplot(Sepal.Width ~ fct_reorder(Species, Sepal.Width), data = iris)
+boxplot(Sepal.Width ~ fct_reorder(Species, Sepal.Width, .desc = TRUE), data = iris)
+chks <- subset(ChickWeight, as.integer(Chick) < 10)
+chks <- transform(chks, Chick = fct_shuffle(Chick))
+if (require("ggplot2")) {
+ggplot(chks, aes(Time, weight, colour = Chick)) +
+geom_point() +
+geom_line()
+# Note that lines match order in legend
+ggplot(chks, aes(Time, weight, colour = fct_reorder2(Chick, Time, weight))) +
+geom_point() +
+geom_line() +
+labs(colour = "Chick")
+}
+```
+## fct_unify. Unify the levels in a list of factors
+```{r warning=FALSE}
+fs <- list(factor("a"), factor("b"), factor(c("a", "b")))
+fct_unify(fs)
+```
+## fct_unique. Unique values of a factor
+```{r warning=FALSE}
+f <- factor(letters[rpois(100, 10)])
+unique(f) # in order of appearance
+fct_unique(f) # in order of levels
+```
+## Other funcitons
+#fct_rev. Reverse order of factor levels. This is sometimes useful when plotting a factor.
+#fct_shift. Shift factor levels to left or right, wrapping around at end. This is useful when the     levels of an ordered factor are actually cyclical, with different conventions on the starting     point.
+#fct_shuffle. Randomly permute factor levels.
+#lvls. Low-level functions for manipulating levels. lvls_reorder leaves values as is, but changes     the order. lvls_revalue changes the values of existing levels; there must be one new level for     each old level. lvls_extend extends the set of levels; the new level must include the old         levels.
+#lvls_union. Find all levels in a list of factors.
